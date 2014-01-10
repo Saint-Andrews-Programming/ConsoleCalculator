@@ -5,15 +5,18 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.print("Please enter password: ");
+		while (true) {
+			System.out.print("Please enter password: ");
 
-		Scanner in = new Scanner(System.in);
-		String input = in.next();
+			Scanner in = new Scanner(System.in);
+			String input = in.next();
 
-		if (input.equalsIgnoreCase("password")) {
-			System.out.println("Password correct!");
-		} else {
-			System.out.println("Password incorrect!");
+			if (input.equalsIgnoreCase("password")) {
+				System.out.println("Password correct!");
+				break;
+			} else {
+				System.out.println("Password incorrect!");
+			}
 		}
 	}
 }
