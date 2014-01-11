@@ -1,7 +1,7 @@
 package calculator.equation;
 
 public interface IEquationPart {
-	public Double getValueDouble();
+	public Double doubleValue();
 	
 	@Override
 	public String toString();

@@ -13,7 +13,7 @@ public class EquationValue extends EquationPart {
 	}
 
 	@Override
-	public Double getValueDouble() {
+	public Double doubleValue() {
 		return this.value;
 	}
 

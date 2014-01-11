@@ -9,8 +9,8 @@ public class EquationSegment extends EquationPart {
 	}
 
 	@Override
-	public Double getValueDouble() {
-		return this.segment.solve();
+	public Double doubleValue() {
+		return this.segment.value();
 	}
 
 }

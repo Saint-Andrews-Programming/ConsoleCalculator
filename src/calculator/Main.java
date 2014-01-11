@@ -3,6 +3,7 @@ package calculator;
 import java.util.List;
 import java.util.Scanner;
 
+import calculator.equation.Equation;
 import calculator.equation.IEquationPart;
 
 public class Main {
@@ -19,12 +20,19 @@ public class Main {
 		try {
 			List<IEquationPart> equationParts = Parser.parse(in.next());
 
-			for (IEquationPart part : equationParts) {
-				System.out.println(part.toString());
-			}
+			// for (IEquationPart part : equationParts) {
+			// System.out.println(part.toString());
+			// }
+
+			System.out.println();
+
+			Equation equation = new Equation(equationParts);
+
+			System.out.println(equation.value());
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.print("An unknown error has accured!");
+			System.out.println("An unknown error has accured!");
 		}
 	}
 }

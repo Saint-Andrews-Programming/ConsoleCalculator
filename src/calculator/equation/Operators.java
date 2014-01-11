@@ -21,7 +21,7 @@ public enum Operators implements IEquationPart {
 	}
 
 	@Override
-	public Double getValueDouble() {
+	public Double doubleValue() {
 		return null;
 	}
 }
