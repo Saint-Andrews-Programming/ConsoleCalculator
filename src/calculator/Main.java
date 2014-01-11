@@ -6,7 +6,7 @@ import java.util.Scanner;
 import calculator.equation.IEquationPart;
 
 public class Main {
-	
+
 	public static Scanner in = new Scanner(System.in);
 
 	public static void main(String[] args) {
@@ -14,11 +14,17 @@ public class Main {
 		System.out.println("=========================================");
 		System.out.println("Welcome to Tommsy64's console calculator!");
 		System.out.println("=========================================");
+		System.out.println();
 
-		List<IEquationPart> equationParts = Parser.parse(in.next());
+		try {
+			List<IEquationPart> equationParts = Parser.parse(in.next());
 
-		for (IEquationPart part : equationParts) {
-			System.out.println(part.toString());
+			for (IEquationPart part : equationParts) {
+				System.out.println(part.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.print("An unknown error has accured!");
 		}
 	}
 }
