@@ -60,13 +60,15 @@ public class Parser {
 		for (int i = 0; i < input.length(); i++) {
 
 			if (operatorCheck(input, i)) {
-				if (getOperatorType(input.charAt(i) + "") == Operators.SUBTRACT)
+				if (getOperatorType(input.charAt(i) + "") == Operators.SUBTRACT) {
 					number = "-";
+					i++;
+				}
 
-				if (getOperatorType(input.charAt(i) + "") == Operators.ADD)
+				if (getOperatorType(input.charAt(i) + "") == Operators.ADD) {
 					number = "+";
-
-				i++;
+					i++;
+				}
 			}
 
 			// Check to see if input is a number
@@ -74,10 +76,15 @@ public class Parser {
 				number = number + input.charAt(i);
 
 			else {
-				equationParts.add(new EquationValue(toDouble(number)));
+
+				if (!number.equalsIgnoreCase(""))
+					equationParts.add(new EquationValue(toDouble(number)));
+
 				number = "";
-				if (isOperator(input.charAt(i) + ""))
+				if (isOperator(input.charAt(i) + "")) {
 					equationParts.add(getOperatorType(input.charAt(i) + ""));
+					continue;
+				}
 			}
 
 			if (i == input.length() - 1)
@@ -144,20 +151,32 @@ public class Parser {
 		if (operatorString.equalsIgnoreCase("/"))
 			return Operators.DIVIDE;
 
+		if (operatorString.equalsIgnoreCase("("))
+			return Operators.PARENTHESES_OPEN;
+
+		if (operatorString.equalsIgnoreCase(")"))
+			return Operators.PARENTHESES_CLOSE;
+
 		return null;
 	}
 
-	private static boolean isOperator(String str) {
-		if (str.equalsIgnoreCase("+"))
+	private static boolean isOperator(String operatorString) {
+		if (operatorString.equalsIgnoreCase("+"))
 			return true;
 
-		if (str.equalsIgnoreCase("-"))
+		if (operatorString.equalsIgnoreCase("-"))
 			return true;
 
-		if (str.equalsIgnoreCase("*"))
+		if (operatorString.equalsIgnoreCase("*"))
 			return true;
 
-		if (str.equalsIgnoreCase("/"))
+		if (operatorString.equalsIgnoreCase("/"))
+			return true;
+
+		if (operatorString.equalsIgnoreCase("("))
+			return true;
+
+		if (operatorString.equalsIgnoreCase(")"))
 			return true;
 
 		return false;
