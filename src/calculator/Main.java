@@ -11,6 +11,6 @@ public class Main {
 		System.out.println("Welcome to Tommsy64's console calculator!");
 		System.out.println("=========================================");
 
-		in.next();
+		Parser.parse(in.next());
 	}
 }
