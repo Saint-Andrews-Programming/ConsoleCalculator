@@ -2,7 +2,7 @@ package calculator.equation;
 
 public class Equation {
 
-	private String[] Values;
+	private EquationPart[] Parts;
 
 	public Double solve() {
 		return null;
