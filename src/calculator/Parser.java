@@ -115,7 +115,9 @@ public class Parser {
 		try {
 			return Double.valueOf(strDouble);
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			System.out.println("User input error!");
+			Main.in.nextLine();
+			System.exit(0);
 			return 0.0;
 		}
 	}
@@ -124,6 +126,7 @@ public class Parser {
 		input = input.replaceAll("\\s+", "");
 		input = input.replaceAll("--", "+");
 		input = input.replaceAll("[+][+]", "+");
+		input = input.replaceAll("[.][.]", ".");
 
 		return input;
 	}
