@@ -1,6 +1,9 @@
 package calculator;
 
+import java.util.List;
 import java.util.Scanner;
+
+import calculator.equation.IEquationPart;
 
 public class Main {
 
@@ -11,6 +14,10 @@ public class Main {
 		System.out.println("Welcome to Tommsy64's console calculator!");
 		System.out.println("=========================================");
 
-		Parser.parse(in.next());
+		List<IEquationPart> equationParts = Parser.parse(in.next());
+
+		for (IEquationPart part : equationParts) {
+			System.out.println(part.toString());
+		}
 	}
 }

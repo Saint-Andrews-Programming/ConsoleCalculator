@@ -1,9 +1,12 @@
 package calculator.equation;
 
-public interface EquationPart {
+public abstract class EquationPart implements IEquationPart {
 
-	public String getValueString();
+	@Override
+	public String toString() {
+		return getValueDouble().toString();
+	}
 
-	public Double getValueDouble();
-
+	@Override
+	public abstract Double getValueDouble();
 }

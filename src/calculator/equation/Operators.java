@@ -1,7 +1,6 @@
 package calculator.equation;
 
-
-public enum Operators implements EquationPart {
+public enum Operators implements IEquationPart {
 	ADD(5, "+"), DIVIDE(3, "/"), MULTIPLY(3, "*"), SUBTRACT(5, "-");
 
 	private int order;
@@ -17,7 +16,7 @@ public enum Operators implements EquationPart {
 	}
 
 	@Override
-	public String getValueString() {
+	public String toString() {
 		return this.operationString;
 	}
 

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import calculator.equation.EquationPart;
 import calculator.equation.EquationValue;
+import calculator.equation.IEquationPart;
 import calculator.equation.Operators;
 
 public class Parser {
@@ -50,30 +50,82 @@ public class Parser {
 			// Optional trailing "whitespace"
 			")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
 
-	private static EquationPart[] Parts;
+	public static List<IEquationPart> parse(String input) {
+		input = applyFixes(input);
 
-	public static EquationPart[] parse(String input) {
+		List<IEquationPart> equationParts = new ArrayList<IEquationPart>();
 
-		List<EquationPart> equationParts = new ArrayList<EquationPart>();
-
-		Double number = null;
+		String number = "";
 
 		for (int i = 0; i < input.length(); i++) {
 
+			if (operatorCheck(input, i)) {
+				if (getOperatorType(input.charAt(i) + "") == Operators.SUBTRACT)
+					number = "-";
+
+				if (getOperatorType(input.charAt(i) + "") == Operators.ADD)
+					number = "+";
+
+				i++;
+			}
+
 			// Check to see if input is a number
-			if (Pattern.matches(fpRegex, number.toString() + input.charAt(i)))
+			if (Pattern.matches(fpRegex, number + input.charAt(i)))
 				number = number + input.charAt(i);
 
 			else {
-				equationParts.add(new EquationValue(number));
-				number = null;
-				i++;
+				equationParts.add(new EquationValue(toDouble(number)));
+				number = "";
 				if (isOperator(input.charAt(i) + ""))
 					equationParts.add(getOperatorType(input.charAt(i) + ""));
 			}
+
+			if (i == input.length() - 1)
+				equationParts.add(new EquationValue(toDouble(number)));
 		}
 
-		return null;
+		return equationParts;
+	}
+
+	// False == Operator, True == Negative/Positive
+	private static boolean operatorCheck(String input, int i) {
+
+		if (isOperator(input.charAt(i) + "") && i != input.length() - 1) {
+			if (i != 0) {
+				if (isOperator(input.charAt(i) + "")
+						&& isOperator(input.charAt(i + 1) + "")) {
+					return false;
+				}
+
+				if (isOperator(input.charAt(i) + "")
+						&& isOperator(input.charAt(i - 1) + "")) {
+					return true;
+				}
+			}
+
+			if (i == 0) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static Double toDouble(String strDouble) {
+		try {
+			return Double.valueOf(strDouble);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return 0.0;
+		}
+	}
+
+	private static String applyFixes(String input) {
+		input = input.replaceAll("\\s+", "");
+		input = input.replaceAll("--", "+");
+		input = input.replaceAll("[+][+]", "+");
+
+		return input;
 	}
 
 	private static Operators getOperatorType(String operatorString) {

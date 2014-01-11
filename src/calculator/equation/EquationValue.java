@@ -1,6 +1,6 @@
 package calculator.equation;
 
-public class EquationValue implements EquationPart {
+public class EquationValue extends EquationPart {
 
 	private Double value;
 
@@ -10,11 +10,6 @@ public class EquationValue implements EquationPart {
 
 	public EquationValue(double value) {
 		this.value = value;
-	}
-
-	@Override
-	public String getValueString() {
-		return this.value.toString();
 	}
 
 	@Override
