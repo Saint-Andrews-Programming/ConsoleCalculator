@@ -9,23 +9,23 @@ public class Equation {
 
 	private List<IEquationPart> equationParts;
 
-	// Map<IEquationPart, Point2D.Double> hm = new HashMap<Integer, Point2D>();
-
 	public Equation(List<IEquationPart> equationParts) {
 		this.equationParts = equationParts;
 	}
 
 	public Double value() {
 
-		Map<EquationValue, Integer> equationValues = new HashMap<EquationValue, Integer>();
+		Map<Integer, EquationValue> equationValues = new HashMap<Integer, EquationValue>();
 
-		Map<Operators, Integer> operators = new HashMap<Operators, Integer>();
+		Map<Integer, Operators> operators = new HashMap<Integer, Operators>();
+
+		Map<Integer, EquationOperator> storedOperations = new HashMap<Integer, EquationOperator>();
 
 		for (IEquationPart part : equationParts) {
 			if (part instanceof EquationValue) {
 
-				equationValues.put((EquationValue) part,
-						equationParts.indexOf(part));
+				equationValues.put(equationParts.indexOf(part),
+						(EquationValue) part);
 			}
 
 			if (part instanceof EquationSegment) {
@@ -33,37 +33,49 @@ public class Equation {
 			}
 
 			if (part instanceof Operators) {
-				operators.put((Operators) part, equationParts.indexOf(part));
+				operators.put(equationParts.indexOf(part), (Operators) part);
 			}
 		}
 
-		Operators operator;
-		Integer min = Integer.valueOf(Integer.MAX_VALUE);
+		for (Entry<Integer, Operators> entryMainLoop : operators.entrySet()) {
 
-		for (Entry<Operators, Integer> entry : operators.entrySet()) {
-			if (min.compareTo(entry.getValue()) > 0) {
-				operator = entry.getKey();
-				min = entry.getKey().getOrder();
+			Operators operator = null;
+			Integer operatorIndex = null;
+
+			Integer min = Integer.valueOf(Integer.MAX_VALUE);
+			for (Entry<Integer, Operators> entry : operators.entrySet()) {
+				// Get the first operation according to the order of operations
+				if (min.compareTo(entry.getKey()) > 0) {
+					operator = entry.getValue();
+					min = entry.getValue().getOrder();
+					operatorIndex = entry.getKey();
+				}
+			}
+
+			for (IEquationPart part : equationParts) {
+				if (part instanceof Operators) {
+					if (min.compareTo(part) > 0) {
+						min = part.getOrder();
+						operatorIndex = part;
+					}
+				}
+			}
+
+			if (operatorIndex == null || operator == null)
+				return equationParts.get(0).doubleValue();
+
+			if (!operator.toString().equalsIgnoreCase("(")
+					&& !operator.toString().equalsIgnoreCase(")")) {
+
+				if (equationParts.get(operatorIndex + 1) instanceof EquationValue
+						&& equationParts.get(operatorIndex - 1) instanceof EquationValue)
+					storedOperations.put(operatorIndex, new EquationOperator(
+							operatorIndex - 1, operator, operatorIndex + 1,
+							equationParts));
+
 			}
 		}
 
-		return min.doubleValue();
-	}
-
-	private Double mathWithOperator(Double d1, Operators op, Double d2) {
-
-		if (op == Operators.ADD)
-			return d1 + d2;
-
-		if (op == Operators.SUBTRACT)
-			return d1 - d2;
-
-		if (op == Operators.MULTIPLY)
-			return d1 * d2;
-
-		if (op == Operators.DIVIDE)
-			return d1 / d2;
-
-		return null;
+		return storedOperations.get(operatorIndex).solve();
 	}
 }
