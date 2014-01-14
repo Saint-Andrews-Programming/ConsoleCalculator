@@ -10,7 +10,7 @@ public class EquationSegment extends EquationPart {
 
 	@Override
 	public Double doubleValue() {
-		return this.segment.value();
+		return this.segment.value().get(0).doubleValue();
 	}
 
 }

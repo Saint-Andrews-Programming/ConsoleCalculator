@@ -20,9 +20,9 @@ public class Main {
 		try {
 			List<IEquationPart> equationParts = Parser.parse(in.next());
 
-			// for (IEquationPart part : equationParts) {
-			// System.out.println(part.toString());
-			// }
+			for (IEquationPart part : equationParts) {
+				System.out.println(part.toString());
+			}
 
 			System.out.println();
 
