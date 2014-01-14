@@ -16,19 +16,27 @@ public class Main {
 		System.out.println("Welcome to Tommsy64's console calculator!");
 		System.out.println("=========================================");
 		System.out.println();
+		System.out.println("Type exit to exit the calculator");
 
 		try {
-			List<IEquationPart> equationParts = Parser.parse(in.next());
+
+			String input = in.next();
+
+			if (input.equalsIgnoreCase("exit"))
+				System.exit(0);
+
+			List<IEquationPart> equationParts = Parser.parse(input);
 
 			for (IEquationPart part : equationParts) {
-				System.out.println(part.toString());
+				System.out.print(part.toString() + " ");
 			}
 
-			System.out.println();
+			System.out.print(" = ");
 
 			Equation equation = new Equation(equationParts);
-
-			System.out.println(equation.value());
+			for (IEquationPart value : equation.value()) {
+				System.out.print(value.toString() + " ");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
