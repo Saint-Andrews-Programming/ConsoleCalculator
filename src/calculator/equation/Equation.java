@@ -59,27 +59,26 @@ public class Equation {
 
 		List<IEquationPart> newEquationParts = new ArrayList<IEquationPart>();
 
-		int i = 0;
-		int x = 0;
-		while (i + x < equationParts.size()) {
-			IEquationPart part = equationParts.get(i + x);
-			if (i == index - 1) {
+		int placeValue = 0;
+		int getValue = 0;
+		while (getValue < equationParts.size()) {
+			IEquationPart part = equationParts.get(getValue);
+			getValue++;
+
+			if (placeValue == index - 1) {
 				newEquationParts.add(
-						i,
+						placeValue,
 						new EquationValue(operator.mathWithOperator(
 								equationParts.get(index - 1).doubleValue(),
 								equationParts.get(index + 1).doubleValue())));
-				i++;
-				x = x + 3;
 
-				if (i + 2 != this.equationParts.size())
-					continue;
-				else
-					break;
+				placeValue++;
+				getValue = getValue + 2;
+				continue;
 			}
 
-			newEquationParts.add(i, part);
-			i++;
+			newEquationParts.add(placeValue, part);
+			placeValue++;
 		}
 
 		return newEquationParts;
