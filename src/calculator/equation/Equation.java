@@ -1,9 +1,7 @@
 package calculator.equation;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class Equation {
 
@@ -13,69 +11,76 @@ public class Equation {
 		this.equationParts = equationParts;
 	}
 
-	public Double value() {
+	public List<IEquationPart> value() {
 
-		Map<Integer, EquationValue> equationValues = new HashMap<Integer, EquationValue>();
+		int proirityLevel = 1;
+		while (proirityLevel <= 5) {
 
-		Map<Integer, Operators> operators = new HashMap<Integer, Operators>();
+			boolean calculating = true;
+			while (calculating) {
+				calculating = false;
+				// The index of equationParts we are currently in
+				int index = 0;
+				for (IEquationPart part : equationParts) {
+					if (part instanceof Operators) {
+						Operators operator = (Operators) part;
 
-		Map<Integer, EquationOperator> storedOperations = new HashMap<Integer, EquationOperator>();
+						if (operator.toString().equalsIgnoreCase("(")
+								|| operator.toString().equalsIgnoreCase(")")) {
 
-		for (IEquationPart part : equationParts) {
-			if (part instanceof EquationValue) {
+						}
 
-				equationValues.put(equationParts.indexOf(part),
-						(EquationValue) part);
-			}
-
-			if (part instanceof EquationSegment) {
-				part = (EquationSegment) part;
-			}
-
-			if (part instanceof Operators) {
-				operators.put(equationParts.indexOf(part), (Operators) part);
-			}
-		}
-
-		for (Entry<Integer, Operators> entryMainLoop : operators.entrySet()) {
-
-			Operators operator = null;
-			Integer operatorIndex = null;
-
-			Integer min = Integer.valueOf(Integer.MAX_VALUE);
-			for (Entry<Integer, Operators> entry : operators.entrySet()) {
-				// Get the first operation according to the order of operations
-				if (min.compareTo(entry.getKey()) > 0) {
-					operator = entry.getValue();
-					min = entry.getValue().getOrder();
-					operatorIndex = entry.getKey();
-				}
-			}
-
-			for (IEquationPart part : equationParts) {
-				if (part instanceof Operators) {
-					if (min.compareTo(part) > 0) {
-						min = part.getOrder();
-						operatorIndex = part;
+						if (operator.getOrder() == proirityLevel) {
+							this.equationParts = makeNewList(operator, index);
+							calculating = true;
+							break;
+						}
 					}
+
+					if (part instanceof EquationValue) {
+
+					}
+
+					if (part instanceof EquationSegment) {
+
+					}
+
+					index++;
 				}
 			}
 
-			if (operatorIndex == null || operator == null)
-				return equationParts.get(0).doubleValue();
-
-			if (!operator.toString().equalsIgnoreCase("(")
-					&& !operator.toString().equalsIgnoreCase(")")) {
-
-				if (equationParts.get(operatorIndex + 1) instanceof EquationValue
-						&& equationParts.get(operatorIndex - 1) instanceof EquationValue)
-					storedOperations.put(operatorIndex, new EquationOperator(
-							operatorIndex - 1, operator, operatorIndex + 1,
-							equationParts));
-
-			}
+			proirityLevel++;
 		}
 
-		return storedOperations.get(operatorIndex).solve();
+		return equationParts;
+	}
+
+	private List<IEquationPart> makeNewList(Operators operator, int index) {
+
+		List<IEquationPart> newEquationParts = new ArrayList<IEquationPart>();
+
+		int placeValue = 0;
+		int getValue = 0;
+		while (getValue < equationParts.size()) {
+			IEquationPart part = equationParts.get(getValue);
+			getValue++;
+
+			if (placeValue == index - 1) {
+				newEquationParts.add(
+						placeValue,
+						new EquationValue(operator.mathWithOperator(
+								equationParts.get(index - 1).doubleValue(),
+								equationParts.get(index + 1).doubleValue())));
+
+				placeValue++;
+				getValue = getValue + 2;
+				continue;
+			}
+
+			newEquationParts.add(placeValue, part);
+			placeValue++;
+		}
+
+		return newEquationParts;
 	}
 }
