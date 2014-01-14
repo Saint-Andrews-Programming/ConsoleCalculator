@@ -47,9 +47,9 @@ public class Equation {
 
 					index++;
 				}
-
-				proirityLevel++;
 			}
+
+			proirityLevel++;
 		}
 
 		return equationParts;
