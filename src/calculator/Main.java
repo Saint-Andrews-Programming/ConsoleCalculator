@@ -12,9 +12,9 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		System.out.println("=========================================");
-		System.out.println("Welcome to Tommsy64's console calculator!");
-		System.out.println("=========================================");
+		System.out.println("===============================================");
+		System.out.println("Welcome to Tommsy64's console calculator v1.0!");
+		System.out.println("===============================================");
 		System.out.println();
 		System.out.println("Type exit to exit the calculator");
 
