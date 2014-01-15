@@ -103,6 +103,12 @@ public class Equation {
 			placeValue++;
 		}
 
+		if (newEquationParts.size() != 0
+				&& newEquationParts.get(newEquationParts.size() - 1) == Operators.PARENTHESES_CLOSE) {
+			newEquationParts.remove(newEquationParts.size() - 1);
+			placeValue--;
+		}
+
 		return newEquationParts;
 	}
 
