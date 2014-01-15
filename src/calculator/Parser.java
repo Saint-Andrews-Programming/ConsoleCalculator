@@ -72,7 +72,8 @@ public class Parser {
 			}
 
 			// Check to see if input is a number
-			if (Pattern.matches(fpRegex, number + input.charAt(i)) || input.charAt(i) == '.')
+			if (Pattern.matches(fpRegex, number + input.charAt(i))
+					|| input.charAt(i) == '.')
 				number = number + input.charAt(i);
 
 			else {
@@ -120,9 +121,9 @@ public class Parser {
 
 	private static Double toDouble(String strDouble) {
 		try {
-			if(strDouble.startsWith("."))
+			if (strDouble.startsWith("."))
 				strDouble = "0" + strDouble;
-			
+
 			return Double.valueOf(strDouble);
 		} catch (NumberFormatException e) {
 			System.out.println("User input error!");

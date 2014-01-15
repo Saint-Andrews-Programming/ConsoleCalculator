@@ -30,19 +30,32 @@ public class Equation {
 
 						}
 
+						if (operator.toString().equalsIgnoreCase("(")) {
+
+							int oldEquationIndex = index + 1;
+							int newEquationIndex = 0;
+							List<IEquationPart> newEquationSegmentParts = new ArrayList<IEquationPart>();
+							while (oldEquationIndex < equationParts.size()
+									&& oldEquationIndex < findParenthesisIndexFromBack(1) - 1) {
+
+								newEquationSegmentParts.add(newEquationIndex,
+										equationParts.get(oldEquationIndex));
+
+								oldEquationIndex++;
+								newEquationIndex++;
+							}
+							this.equationParts = makeNewList(
+									new EquationSegment(new Equation(
+											newEquationSegmentParts)), index);
+							proirityLevel = 0;
+							break;
+						}
+
 						if (operator.getOrder() == proirityLevel) {
 							this.equationParts = makeNewList(operator, index);
 							calculating = true;
 							break;
 						}
-					}
-
-					if (part instanceof EquationValue) {
-
-					}
-
-					if (part instanceof EquationSegment) {
-
 					}
 
 					index++;
@@ -53,6 +66,35 @@ public class Equation {
 		}
 
 		return equationParts;
+	}
+
+	private List<IEquationPart> makeNewList(EquationSegment eSegment,
+			int indexOfeSegment) {
+		List<IEquationPart> newEquationParts = new ArrayList<IEquationPart>();
+
+		int placeValue = 0;
+		int getValue = 0;
+		while (getValue < this.equationParts.size()) {
+			IEquationPart part = this.equationParts.get(getValue);
+			getValue++;
+
+			if (placeValue == indexOfeSegment) {
+				newEquationParts.add(new EquationValue(eSegment.doubleValue()));
+
+				placeValue++;
+				getValue = getValue + eSegment.getOriginalSize();
+				continue;
+			}
+
+			newEquationParts.add(placeValue, part);
+			placeValue++;
+		}
+
+		if (findParenthesisIndexFromBack(1) == this.getSize()) {
+			newEquationParts.remove(newEquationParts.size() - 1);
+		}
+
+		return newEquationParts;
 	}
 
 	private List<IEquationPart> makeNewList(Operators operator, int index) {
@@ -82,5 +124,25 @@ public class Equation {
 		}
 
 		return newEquationParts;
+	}
+
+	private int findParenthesisIndexFromBack(int countFromBack) {
+		int index = equationParts.size() - 1;
+		int x = 0;
+		while (index > 0) {
+			if (equationParts.get(index) instanceof Operators) {
+				x++;
+				if (countFromBack == x) {
+					return index + 1;
+				}
+			}
+
+			index--;
+		}
+		return -1;
+	}
+
+	public int getSize() {
+		return this.equationParts.size();
 	}
 }
