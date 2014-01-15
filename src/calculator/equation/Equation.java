@@ -44,6 +44,13 @@ public class Equation {
 								oldEquationIndex++;
 								newEquationIndex++;
 							}
+
+							if (newEquationSegmentParts
+									.get(newEquationSegmentParts.size() - 1) == Operators.PARENTHESES_CLOSE) {
+								newEquationSegmentParts
+										.remove(newEquationSegmentParts.size() - 1);
+							}
+
 							this.equationParts = makeNewList(
 									new EquationSegment(new Equation(
 											newEquationSegmentParts)), index);
@@ -75,6 +82,12 @@ public class Equation {
 		int placeValue = 0;
 		int getValue = 0;
 		while (getValue < this.equationParts.size()) {
+			if (newEquationParts.size() != 0
+					&& newEquationParts.get(newEquationParts.size() - 1) == Operators.PARENTHESES_CLOSE) {
+				newEquationParts.remove(newEquationParts.size() - 1);
+				placeValue--;
+			}
+
 			IEquationPart part = this.equationParts.get(getValue);
 			getValue++;
 
@@ -88,10 +101,6 @@ public class Equation {
 
 			newEquationParts.add(placeValue, part);
 			placeValue++;
-		}
-
-		if (findParenthesisIndexFromBack(1) == this.getSize()) {
-			newEquationParts.remove(newEquationParts.size() - 1);
 		}
 
 		return newEquationParts;

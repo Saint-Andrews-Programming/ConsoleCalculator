@@ -106,7 +106,8 @@ public class Parser {
 				}
 
 				if (isOperator(input.charAt(i) + "")
-						&& isOperator(input.charAt(i - 1) + "")) {
+						&& isOperator(input.charAt(i - 1) + "")
+						&& input.charAt(i - 1) != ')') {
 					return true;
 				}
 			}
